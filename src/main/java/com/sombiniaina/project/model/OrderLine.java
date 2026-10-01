@@ -5,4 +5,5 @@ import java.util.UUID;
 import lombok.Builder;
 
 @Builder
-public record OrderLine(UUID id, int quantity, BigDecimal unitPrice) {}
+public record OrderLine(
+    UUID id, int quantity, BigDecimal unitPrice, UUID productId, String productName) {}

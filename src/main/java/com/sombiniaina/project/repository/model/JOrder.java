@@ -1,13 +1,12 @@
 package com.sombiniaina.project.repository.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.List;
 import java.util.UUID;
 import lombok.*;
 
@@ -26,4 +25,7 @@ public class JOrder {
   @Positive private BigDecimal totalPrice;
 
   private Instant orderDate;
+
+  @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+  private List<JOrderLine> lines;
 }
