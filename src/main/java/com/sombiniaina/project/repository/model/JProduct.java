@@ -6,6 +6,8 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import java.math.BigDecimal;
+import java.util.UUID;
+
 import lombok.*;
 
 @Entity
@@ -16,7 +18,7 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 public class JProduct {
-  @Id private String id;
+  @Id private UUID id;
 
   @NotNull private String name;
 

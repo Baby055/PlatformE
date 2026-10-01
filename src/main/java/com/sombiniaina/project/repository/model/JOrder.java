@@ -8,17 +8,19 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import java.math.BigDecimal;
 import java.time.Instant;
+import java.util.UUID;
+
 import lombok.*;
 
 @Entity
-@Table(name = "order")
+@Table(name = "orders")
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
 public class JOrder {
-  @Id private String id;
+  @Id private UUID id;
 
   @NotNull @Email private String customerEmail;
 

@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Positive;
 import java.math.BigDecimal;
+import java.util.UUID;
+
 import lombok.*;
 
 @Entity
@@ -14,7 +16,7 @@ import lombok.*;
 @NoArgsConstructor
 @Builder
 public class JOrderLine {
-  @Id private String id;
+  @Id private UUID id;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "order_id", nullable = false)
