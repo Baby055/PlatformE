@@ -7,4 +7,9 @@ import java.util.UUID;
 import lombok.Builder;
 
 @Builder
-public record Order(UUID id, String customerEmail, BigDecimal totalPrice, Instant orderDate, List<OrderLine> lines) {}
+public record Order(
+    UUID id,
+    String customerEmail,
+    BigDecimal totalPrice,
+    Instant orderDate,
+    List<OrderLine> lines) {}
