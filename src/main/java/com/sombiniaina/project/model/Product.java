@@ -1,13 +1,7 @@
 package com.sombiniaina.project.model;
 
+import java.math.BigDecimal;
 import lombok.Builder;
 
-import java.math.BigDecimal;
-
 @Builder
-public record Product(
-        String id,
-        String name,
-        BigDecimal price,
-        long stockQuantity
-){}
+public record Product(String id, String name, BigDecimal price, long stockQuantity) {}

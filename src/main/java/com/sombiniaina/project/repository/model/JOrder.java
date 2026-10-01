@@ -6,10 +6,9 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
-import lombok.*;
-
 import java.math.BigDecimal;
 import java.time.Instant;
+import lombok.*;
 
 @Entity
 @Table(name = "order")
@@ -19,13 +18,11 @@ import java.time.Instant;
 @NoArgsConstructor
 @Builder
 public class JOrder {
-    @Id private String id;
+  @Id private String id;
 
-    @NotNull @Email
-    private String customerEmail;
+  @NotNull @Email private String customerEmail;
 
-    @Positive
-    private BigDecimal totalPrice;
+  @Positive private BigDecimal totalPrice;
 
-    private Instant orderDate;
+  private Instant orderDate;
 }

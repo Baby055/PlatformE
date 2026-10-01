@@ -5,9 +5,8 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
-import lombok.*;
-
 import java.math.BigDecimal;
+import lombok.*;
 
 @Entity
 @Table(name = "product")
@@ -17,11 +16,11 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 @Builder
 public class JProduct {
-    @Id private  String id;
+  @Id private String id;
 
-    @NotNull private  String name;
+  @NotNull private String name;
 
-    @Positive private BigDecimal price;
+  @Positive private BigDecimal price;
 
-    @Positive private long stockQuantity;
+  @Positive private long stockQuantity;
 }
