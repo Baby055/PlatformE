@@ -5,6 +5,7 @@ import com.sombiniaina.project.dto.request.ProductOrderRequest;
 import com.sombiniaina.project.exception.InsufficientStockException;
 import com.sombiniaina.project.mapper.OrderMapper;
 import com.sombiniaina.project.model.Order;
+import com.sombiniaina.project.model.StockEpuiseEvent;
 import com.sombiniaina.project.repository.OrderLineRepository;
 import com.sombiniaina.project.repository.OrderRepository;
 import com.sombiniaina.project.repository.ProductRepository;
@@ -17,6 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -27,6 +29,7 @@ public class OrderService {
   private final OrderMapper orderMapper;
   private final OrderLineRepository orderLineRepository;
   private final ProductRepository productRepository;
+  private final ApplicationEventPublisher applicationEventPublisher;
 
   @Transactional
   public Order checkout(CheckoutRequest request) {
@@ -64,6 +67,11 @@ public class OrderService {
 
       jProduct.setStockQuantity(jProduct.getStockQuantity() - itemRequest.getQuantity());
       productRepository.save(jProduct);
+
+      if (jProduct.getStockQuantity() == 0){
+        StockEpuiseEvent stockEpuiseEvent = new StockEpuiseEvent(jProduct.getId(), jProduct.getName());
+        applicationEventPublisher.publishEvent(stockEpuiseEvent);
+      }
 
       BigDecimal itemSubTotal =
           jProduct.getPrice().multiply(BigDecimal.valueOf(itemRequest.getQuantity()));
