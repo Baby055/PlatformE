@@ -5,42 +5,43 @@ import com.sombiniaina.project.model.Product;
 import com.sombiniaina.project.model.ProductBackInStockEvent;
 import com.sombiniaina.project.repository.ProductRepository;
 import com.sombiniaina.project.repository.model.JProduct;
+import java.math.BigDecimal;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.math.BigDecimal;
-import java.util.UUID;
-
 @Service
 @AllArgsConstructor
 public class InventoryService {
-    private final ProductRepository productRepository;
-    private final ProductMapper productMapper;
-    private final ApplicationEventPublisher applicationEventPublisher;
+  private final ProductRepository productRepository;
+  private final ProductMapper productMapper;
+  private final ApplicationEventPublisher applicationEventPublisher;
 
-    @Transactional
-    public Product restockAndRevalue(UUID productId, int addedQuantity, BigDecimal newBasePrice) {
-        JProduct jProduct = productRepository.findById(productId)
-                        .orElseThrow(() -> new RuntimeException("Product not found"));
-        long initialStock = jProduct.getStockQuantity();
-        jProduct.setStockQuantity(jProduct.getStockQuantity() + addedQuantity);
+  @Transactional
+  public Product restockAndRevalue(UUID productId, int addedQuantity, BigDecimal newBasePrice) {
+    JProduct jProduct =
+        productRepository
+            .findById(productId)
+            .orElseThrow(() -> new RuntimeException("Product not found"));
+    long initialStock = jProduct.getStockQuantity();
+    jProduct.setStockQuantity(jProduct.getStockQuantity() + addedQuantity);
 
-        if (addedQuantity > 100){
-            BigDecimal dicount = newBasePrice.multiply(BigDecimal.valueOf(0.10));
-            jProduct.setPrice(newBasePrice.subtract(dicount));
-        }else {
-            jProduct.setPrice(newBasePrice);
-        }
-        productRepository.save(jProduct);
-
-        if (initialStock == 0 && (initialStock + addedQuantity) > 0){
-            ProductBackInStockEvent productBackInStockEvent =
-                    new ProductBackInStockEvent(jProduct.getId(), jProduct.getName());
-            applicationEventPublisher.publishEvent(productBackInStockEvent);
-        }
-
-        return productMapper.toModel(jProduct);
+    if (addedQuantity > 100) {
+      BigDecimal dicount = newBasePrice.multiply(BigDecimal.valueOf(0.10));
+      jProduct.setPrice(newBasePrice.subtract(dicount));
+    } else {
+      jProduct.setPrice(newBasePrice);
     }
+    productRepository.save(jProduct);
+
+    if (initialStock == 0 && (initialStock + addedQuantity) > 0) {
+      ProductBackInStockEvent productBackInStockEvent =
+          new ProductBackInStockEvent(jProduct.getId(), jProduct.getName());
+      applicationEventPublisher.publishEvent(productBackInStockEvent);
+    }
+
+    return productMapper.toModel(jProduct);
+  }
 }
