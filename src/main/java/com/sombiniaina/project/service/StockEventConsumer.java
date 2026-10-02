@@ -11,20 +11,19 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class StockEventConsumer {
-    @Autowired
-    private JavaMailSender mailSender;
+  @Autowired private JavaMailSender mailSender;
 
-    @Value("${app.admin.email}")
-    private String adminEmail;
+  @Value("${app.admin.email}")
+  private String adminEmail;
 
-    @Async
-    @EventListener
-    public void handleStockEpuise(StockEpuiseEvent event){
-        SimpleMailMessage message = new SimpleMailMessage();
-        message.setTo(adminEmail);
-        message.setSubject("Stock Epuise Information");
-        message.setText("Greetings Admin , the stock for" + event.productName() + "is depleted");
+  @Async
+  @EventListener
+  public void handleStockEpuise(StockEpuiseEvent event) {
+    SimpleMailMessage message = new SimpleMailMessage();
+    message.setTo(adminEmail);
+    message.setSubject("Stock Epuise Information");
+    message.setText("Greetings Admin , the stock for" + event.productName() + "is depleted");
 
-        mailSender.send(message);
-    }
+    mailSender.send(message);
+  }
 }

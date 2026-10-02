@@ -68,8 +68,9 @@ public class OrderService {
       jProduct.setStockQuantity(jProduct.getStockQuantity() - itemRequest.getQuantity());
       productRepository.save(jProduct);
 
-      if (jProduct.getStockQuantity() == 0){
-        StockEpuiseEvent stockEpuiseEvent = new StockEpuiseEvent(jProduct.getId(), jProduct.getName());
+      if (jProduct.getStockQuantity() == 0) {
+        StockEpuiseEvent stockEpuiseEvent =
+            new StockEpuiseEvent(jProduct.getId(), jProduct.getName());
         applicationEventPublisher.publishEvent(stockEpuiseEvent);
       }
 
