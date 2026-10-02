@@ -11,70 +11,82 @@ import com.sombiniaina.project.repository.ProductRepository;
 import com.sombiniaina.project.repository.model.JOrder;
 import com.sombiniaina.project.repository.model.JOrderLine;
 import com.sombiniaina.project.repository.model.JProduct;
-import lombok.AllArgsConstructor;
-import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
+import lombok.AllArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 @AllArgsConstructor
 public class OrderService {
-    private final OrderRepository orderRepository;
-    private final OrderMapper orderMapper;
-    private final OrderLineRepository orderLineRepository;
-    private final ProductRepository productRepository;
+  private final OrderRepository orderRepository;
+  private final OrderMapper orderMapper;
+  private final OrderLineRepository orderLineRepository;
+  private final ProductRepository productRepository;
 
-    @Transactional
-    public Order checkout(CheckoutRequest request) {
-        JOrder jOrder = JOrder.builder()
-                .id(UUID.randomUUID())
-                .customerEmail(request.getCustomerEmail())
-                .totalPrice(BigDecimal.ZERO)
-                .orderDate(Instant.now())
-                .build();
+  @Transactional
+  public Order checkout(CheckoutRequest request) {
+    JOrder jOrder =
+        JOrder.builder()
+            .id(UUID.randomUUID())
+            .customerEmail(request.getCustomerEmail())
+            .totalPrice(BigDecimal.ZERO)
+            .orderDate(Instant.now())
+            .build();
 
-        jOrder = orderRepository.save(jOrder);
+    jOrder = orderRepository.save(jOrder);
 
-        BigDecimal runningTotalPrice = BigDecimal.ZERO;
-        List<JOrderLine> savedLines = new ArrayList<>();
+    BigDecimal runningTotalPrice = BigDecimal.ZERO;
+    List<JOrderLine> savedLines = new ArrayList<>();
 
-        for (ProductOrderRequest itemRequest : request.getItems()) {
-            JProduct jProduct = productRepository.findById(itemRequest.getProductId())
-                    .orElseThrow(() -> new RuntimeException("Product not found with id " + itemRequest.getProductId()));
+    for (ProductOrderRequest itemRequest : request.getItems()) {
+      JProduct jProduct =
+          productRepository
+              .findById(itemRequest.getProductId())
+              .orElseThrow(
+                  () ->
+                      new RuntimeException(
+                          "Product not found with id " + itemRequest.getProductId()));
 
-            if (jProduct.getStockQuantity() < itemRequest.getQuantity()) {
-                throw new InsufficientStockException("Insufficient stock for item" + jProduct.getName()
-                        + ".Available : " + jProduct.getStockQuantity()+ ", Requested : " + itemRequest.getQuantity());
-            }
+      if (jProduct.getStockQuantity() < itemRequest.getQuantity()) {
+        throw new InsufficientStockException(
+            "Insufficient stock for item"
+                + jProduct.getName()
+                + ".Available : "
+                + jProduct.getStockQuantity()
+                + ", Requested : "
+                + itemRequest.getQuantity());
+      }
 
-            jProduct.setStockQuantity(jProduct.getStockQuantity() - itemRequest.getQuantity());
-            productRepository.save(jProduct);
+      jProduct.setStockQuantity(jProduct.getStockQuantity() - itemRequest.getQuantity());
+      productRepository.save(jProduct);
 
-            BigDecimal itemSubTotal = jProduct.getPrice().multiply(BigDecimal.valueOf(itemRequest.getQuantity()));
-            runningTotalPrice = runningTotalPrice.add(itemSubTotal);
+      BigDecimal itemSubTotal =
+          jProduct.getPrice().multiply(BigDecimal.valueOf(itemRequest.getQuantity()));
+      runningTotalPrice = runningTotalPrice.add(itemSubTotal);
 
-            JOrderLine jOrderLine = JOrderLine.builder()
-                    .id(UUID.randomUUID())
-                    .order(jOrder)
-                    .product(jProduct)
-                    .quantity(itemRequest.getQuantity())
-                    .unitPrice(jProduct.getPrice())
-                    .build();
+      JOrderLine jOrderLine =
+          JOrderLine.builder()
+              .id(UUID.randomUUID())
+              .order(jOrder)
+              .product(jProduct)
+              .quantity(itemRequest.getQuantity())
+              .unitPrice(jProduct.getPrice())
+              .build();
 
-            savedLines.add(orderLineRepository.save(jOrderLine));
-        }
-
-        jOrder.setTotalPrice(runningTotalPrice);
-
-        jOrder.setLines(savedLines);
-
-        jOrder = orderRepository.save(jOrder);
-
-        return orderMapper.toModel(jOrder);
+      savedLines.add(orderLineRepository.save(jOrderLine));
     }
+
+    jOrder.setTotalPrice(runningTotalPrice);
+
+    jOrder.setLines(savedLines);
+
+    jOrder = orderRepository.save(jOrder);
+
+    return orderMapper.toModel(jOrder);
+  }
 }
