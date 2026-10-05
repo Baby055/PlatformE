@@ -19,6 +19,7 @@ public class ProductMapper {
         .name(jProduct.getName())
         .price(jProduct.getPrice())
         .stockQuantity(jProduct.getStockQuantity())
+        .creationDate(jProduct.getCreationDate())
         .build();
   }
 
@@ -32,6 +33,7 @@ public class ProductMapper {
         .name(product.name())
         .price(product.price())
         .stockQuantity(product.stockQuantity())
+        .creationDate(product.creationDate())
         .build();
   }
 }
