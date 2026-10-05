@@ -1,7 +1,6 @@
 package com.sombiniaina.project.repository;
 
 import com.sombiniaina.project.repository.model.JProduct;
-
 import java.time.Instant;
 import java.util.List;
 import java.util.Optional;

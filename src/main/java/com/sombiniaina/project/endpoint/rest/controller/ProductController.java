@@ -9,10 +9,10 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @AllArgsConstructor
 public class ProductController {
-    private final ProductService productService;
+  private final ProductService productService;
 
-    @GetMapping("/products/new-arrivals")
-    public ResponseEntity<?> newArrivals(){
-        return ResponseEntity.ok(productService.getNewArrivals());
-    }
+  @GetMapping("/products/new-arrivals")
+  public ResponseEntity<?> newArrivals() {
+    return ResponseEntity.ok(productService.getNewArrivals());
+  }
 }
