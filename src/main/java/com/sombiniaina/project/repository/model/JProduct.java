@@ -6,6 +6,7 @@ import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import java.math.BigDecimal;
+import java.time.Instant;
 import java.util.UUID;
 import lombok.*;
 
@@ -24,4 +25,6 @@ public class JProduct {
   @Positive private BigDecimal price;
 
   @Positive private long stockQuantity;
+
+  @NotNull private Instant creationDate;
 }

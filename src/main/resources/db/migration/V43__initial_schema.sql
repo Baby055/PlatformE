@@ -3,7 +3,8 @@ CREATE TABLE product
     id uuid primary key,
     name varchar not null,
     price numeric(10,2) not null,
-    stock_quantity bigint not null
+    stock_quantity bigint not null,
+    creation_date timestampz not null
 );
 
 CREATE TABLE orders
