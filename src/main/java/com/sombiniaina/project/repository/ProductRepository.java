@@ -13,7 +13,5 @@ import org.springframework.stereotype.Repository;
 public interface ProductRepository extends JpaRepository<JProduct, UUID> {
   Optional<JProduct> findById(UUID id);
 
-  List<JProduct> findByNameContainingIgnoreCase(String keyword);
-
-  Optional<JProduct> findByCreationDateAfter(Instant creationDate);
+  List<JProduct> findByCreationDateAfter(Instant creationDate);
 }
