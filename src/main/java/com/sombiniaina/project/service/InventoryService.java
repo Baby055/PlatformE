@@ -24,15 +24,15 @@ public class InventoryService {
   public Product restockAndRevalue(UUID productId, int addedQuantity, BigDecimal newBasePrice) {
     JProduct jProduct =
         productRepository
-            .findById(productId)
+            .findWithLockById(productId)
             .orElseThrow(
                 () -> new ProductNotFoundException("Product not found with id " + productId));
     long initialStock = jProduct.getStockQuantity();
     jProduct.setStockQuantity(initialStock + addedQuantity);
 
     if (addedQuantity > 100) {
-      BigDecimal dicount = newBasePrice.multiply(BigDecimal.valueOf(0.10));
-      jProduct.setPrice(newBasePrice.subtract(dicount));
+      BigDecimal discount = newBasePrice.multiply(BigDecimal.valueOf(0.10));
+      jProduct.setPrice(newBasePrice.subtract(discount));
     } else {
       jProduct.setPrice(newBasePrice);
     }
