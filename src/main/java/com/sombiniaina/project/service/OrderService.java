@@ -50,7 +50,7 @@ public class OrderService {
     for (ProductOrderRequest itemRequest : request.getItems()) {
       JProduct jProduct =
           productRepository
-              .findById(itemRequest.getProductId())
+                  .findWithLockById(itemRequest.getProductId())
               .orElseThrow(
                   () ->
                       new ProductNotFoundException(
