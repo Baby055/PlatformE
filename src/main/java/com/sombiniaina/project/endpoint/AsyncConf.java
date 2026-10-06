@@ -1,4 +1,4 @@
-package com.sombiniaina.project.endpoint.rest.controller;
+package com.sombiniaina.project.endpoint;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableAsync;
