@@ -1,5 +1,6 @@
 package com.sombiniaina.project.service;
 
+import com.sombiniaina.project.exception.ProductNotFoundException;
 import com.sombiniaina.project.mapper.ProductMapper;
 import com.sombiniaina.project.model.Product;
 import com.sombiniaina.project.model.ProductBackInStockEvent;
@@ -24,7 +25,7 @@ public class InventoryService {
     JProduct jProduct =
         productRepository
             .findById(productId)
-            .orElseThrow(() -> new RuntimeException("Product not found"));
+            .orElseThrow(() -> new ProductNotFoundException("Product not found with id " + productId));
     long initialStock = jProduct.getStockQuantity();
     jProduct.setStockQuantity(initialStock + addedQuantity);
 

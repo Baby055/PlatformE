@@ -3,6 +3,7 @@ package com.sombiniaina.project.service;
 import com.sombiniaina.project.dto.request.CheckoutRequest;
 import com.sombiniaina.project.dto.request.ProductOrderRequest;
 import com.sombiniaina.project.exception.InsufficientStockException;
+import com.sombiniaina.project.exception.ProductNotFoundException;
 import com.sombiniaina.project.mapper.OrderMapper;
 import com.sombiniaina.project.model.Order;
 import com.sombiniaina.project.model.StockEpuiseEvent;
@@ -52,7 +53,7 @@ public class OrderService {
               .findById(itemRequest.getProductId())
               .orElseThrow(
                   () ->
-                      new RuntimeException(
+                      new ProductNotFoundException(
                           "Product not found with id " + itemRequest.getProductId()));
 
       if (jProduct.getStockQuantity() < itemRequest.getQuantity()) {
