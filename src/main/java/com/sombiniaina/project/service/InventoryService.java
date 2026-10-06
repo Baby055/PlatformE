@@ -25,7 +25,8 @@ public class InventoryService {
     JProduct jProduct =
         productRepository
             .findById(productId)
-            .orElseThrow(() -> new ProductNotFoundException("Product not found with id " + productId));
+            .orElseThrow(
+                () -> new ProductNotFoundException("Product not found with id " + productId));
     long initialStock = jProduct.getStockQuantity();
     jProduct.setStockQuantity(initialStock + addedQuantity);
 
