@@ -4,7 +4,7 @@ CREATE TABLE product
     name varchar not null,
     price numeric(10,2) not null,
     stock_quantity bigint not null,
-    creation_date timestampz not null
+    creation_date timestamptz not null
 );
 
 CREATE TABLE orders

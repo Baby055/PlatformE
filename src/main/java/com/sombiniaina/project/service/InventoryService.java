@@ -26,7 +26,7 @@ public class InventoryService {
             .findById(productId)
             .orElseThrow(() -> new RuntimeException("Product not found"));
     long initialStock = jProduct.getStockQuantity();
-    jProduct.setStockQuantity(jProduct.getStockQuantity() + addedQuantity);
+    jProduct.setStockQuantity(initialStock + addedQuantity);
 
     if (addedQuantity > 100) {
       BigDecimal dicount = newBasePrice.multiply(BigDecimal.valueOf(0.10));

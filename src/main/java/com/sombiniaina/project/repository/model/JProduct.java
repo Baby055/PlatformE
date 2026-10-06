@@ -5,6 +5,7 @@ import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.UUID;
@@ -24,7 +25,7 @@ public class JProduct {
 
   @Positive private BigDecimal price;
 
-  @Positive private long stockQuantity;
+  @PositiveOrZero private long stockQuantity;
 
   @NotNull private Instant creationDate;
 }
