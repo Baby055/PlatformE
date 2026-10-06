@@ -8,6 +8,8 @@ import jakarta.validation.constraints.Positive;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.UUID;
+
+import jakarta.validation.constraints.PositiveOrZero;
 import lombok.*;
 
 @Entity
@@ -24,7 +26,8 @@ public class JProduct {
 
   @Positive private BigDecimal price;
 
-  @Positive private long stockQuantity;
+  @PositiveOrZero
+  private long stockQuantity;
 
   @NotNull private Instant creationDate;
 }
