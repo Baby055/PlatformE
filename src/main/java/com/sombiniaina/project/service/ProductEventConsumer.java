@@ -7,9 +7,9 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class ProductEventConsumer {
-    @Async
-    @EventListener
-    public void onProductBackInStock(ProductBackInStockEvent event) {
-        System.out.println("This product" + event.productName() + " has been back in stock");
-    }
+  @Async
+  @EventListener
+  public void onProductBackInStock(ProductBackInStockEvent event) {
+    System.out.println("This product" + event.productName() + " has been back in stock");
+  }
 }
