@@ -24,7 +24,7 @@ public class InventoryService {
   public Product restockAndRevalue(UUID productId, int addedQuantity, BigDecimal newBasePrice) {
     JProduct jProduct =
         productRepository
-                .findWithLockById(productId)
+            .findWithLockById(productId)
             .orElseThrow(
                 () -> new ProductNotFoundException("Product not found with id " + productId));
     long initialStock = jProduct.getStockQuantity();
