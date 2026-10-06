@@ -10,9 +10,7 @@ import com.sombiniaina.project.repository.model.JProduct;
 import java.time.Instant;
 import java.util.List;
 import java.util.UUID;
-
 import lombok.AllArgsConstructor;
-import lombok.Generated;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -27,34 +25,37 @@ public class ProductService {
 
   public Product createProduct(ProductCreateRequest request) {
     JProduct jProduct =
-            JProduct.builder()
-                    .id(UUID.randomUUID())
-                    .name(request.getName())
-                    .stockQuantity(request.getStockQuantity())
-                    .price(request.getPrice())
-                    .creationDate(Instant.now())
-                    .build();
+        JProduct.builder()
+            .id(UUID.randomUUID())
+            .name(request.getName())
+            .stockQuantity(request.getStockQuantity())
+            .price(request.getPrice())
+            .creationDate(Instant.now())
+            .build();
     return productMapper.toModel(productRepository.save(jProduct));
   }
 
   public List<Product> getAllProducts(String keyword, int page, int size) {
     Pageable pageable = PageRequest.of(page, size);
     String searchKeword = (keyword == null) ? "" : keyword;
-    Page<JProduct> jProducts = productRepository.findByNameContainingIgnoreCase(searchKeword, pageable);
+    Page<JProduct> jProducts =
+        productRepository.findByNameContainingIgnoreCase(searchKeword, pageable);
     return productMapper.toModel(jProducts.getContent());
   }
 
   public Product updateProduct(UUID id, ProductUpdateRequest request) {
     JProduct jProduct =
-            productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException("Product not found"));
+        productRepository
+            .findById(id)
+            .orElseThrow(() -> new ProductNotFoundException("Product not found"));
     jProduct.setName(request.getName());
     jProduct.setPrice(request.getPrice());
     jProduct.setStockQuantity(request.getQuantity());
     return productMapper.toModel(productRepository.save(jProduct));
   }
 
-  public void  deleteProduct(UUID id) {
-    if(productRepository.findById(id).isEmpty()) {
+  public void deleteProduct(UUID id) {
+    if (productRepository.findById(id).isEmpty()) {
       throw new ProductNotFoundException("Product not found");
     }
     productRepository.deleteById(id);
