@@ -12,4 +12,5 @@ public record Order(
     String customerEmail,
     BigDecimal totalPrice,
     Instant orderDate,
-    List<OrderLine> lines) {}
+    List<OrderLine> lines,
+    OrderStatus status) {}

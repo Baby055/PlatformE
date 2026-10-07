@@ -1,5 +1,6 @@
 package com.sombiniaina.project.repository.model;
 
+import com.sombiniaina.project.model.OrderStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
@@ -28,4 +29,7 @@ public class JOrder {
 
   @OneToMany(mappedBy = "order", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
   private List<JOrderLine> lines;
+
+  @Enumerated(EnumType.STRING)
+  private OrderStatus status;
 }

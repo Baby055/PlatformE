@@ -22,6 +22,7 @@ public class OrderMapper {
         .totalPrice(jOrder.getTotalPrice())
         .orderDate(jOrder.getOrderDate())
         .lines(orderLineMapper.toModel(jOrder.getLines()))
+        .status(jOrder.getStatus())
         .build();
   }
 
@@ -35,6 +36,7 @@ public class OrderMapper {
         .customerEmail(order.customerEmail())
         .totalPrice(order.totalPrice())
         .orderDate(order.orderDate())
+        .status(order.status())
         .build();
   }
 }
