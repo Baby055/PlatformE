@@ -3,9 +3,11 @@ package com.sombiniaina.project.service;
 import com.sombiniaina.project.dto.request.CheckoutRequest;
 import com.sombiniaina.project.dto.request.ProductOrderRequest;
 import com.sombiniaina.project.exception.InsufficientStockException;
+import com.sombiniaina.project.exception.OrderNotFoundException;
 import com.sombiniaina.project.exception.ProductNotFoundException;
 import com.sombiniaina.project.mapper.OrderMapper;
 import com.sombiniaina.project.model.Order;
+import com.sombiniaina.project.model.OrderStatus;
 import com.sombiniaina.project.model.StockEpuiseEvent;
 import com.sombiniaina.project.repository.OrderLineRepository;
 import com.sombiniaina.project.repository.OrderRepository;
@@ -40,6 +42,7 @@ public class OrderService {
             .customerEmail(request.getCustomerEmail())
             .totalPrice(BigDecimal.ZERO)
             .orderDate(Instant.now())
+                .status(OrderStatus.PENDING)
             .build();
 
     jOrder = orderRepository.save(jOrder);
@@ -97,6 +100,31 @@ public class OrderService {
 
     jOrder = orderRepository.save(jOrder);
 
+    return orderMapper.toModel(jOrder);
+  }
+
+  @Transactional
+  public Order cancelOrder(UUID orderId) {
+    JOrder jOrder =
+            orderRepository.findById(orderId)
+                    .orElseThrow(() -> new OrderNotFoundException("Order not found"));
+
+    if (jOrder.getStatus() == OrderStatus.CANCELLED || jOrder.getStatus() == OrderStatus.SHIPPED) {
+      throw new RuntimeException("Cannot cancel an order that's already cancelled or shipped");
+    }
+
+    jOrder.setStatus(OrderStatus.CANCELLED);
+
+    for (JOrderLine jOrderLine : jOrder.getLines()) {
+      UUID targetProductId = jOrderLine.getProduct().getId();
+
+      JProduct jProduct =
+              productRepository.findWithLockById(targetProductId)
+                      .orElseThrow(() -> new ProductNotFoundException("Product not found with id " + targetProductId));
+      jProduct.setStockQuantity(jProduct.getStockQuantity() + jOrderLine.getQuantity());
+      productRepository.save(jProduct);
+    }
+    orderRepository.save(jOrder);
     return orderMapper.toModel(jOrder);
   }
 }
