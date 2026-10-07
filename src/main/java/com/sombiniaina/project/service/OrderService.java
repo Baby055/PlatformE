@@ -127,4 +127,15 @@ public class OrderService {
     orderRepository.save(jOrder);
     return orderMapper.toModel(jOrder);
   }
+
+  @Transactional(readOnly = true)
+  public List<Order> getOrdersByCustomerEmail(String email) {
+    List<JOrder> jOrders = orderRepository.findByCustomerEmail(email);
+
+    if (jOrders.isEmpty()) {
+      throw new OrderNotFoundException("Order not found");
+    }
+
+    return orderMapper.toModel(jOrders);
+  }
 }
