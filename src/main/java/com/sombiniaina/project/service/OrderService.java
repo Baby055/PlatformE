@@ -42,7 +42,7 @@ public class OrderService {
             .customerEmail(request.getCustomerEmail())
             .totalPrice(BigDecimal.ZERO)
             .orderDate(Instant.now())
-                .status(OrderStatus.PENDING)
+            .status(OrderStatus.PENDING)
             .build();
 
     jOrder = orderRepository.save(jOrder);
@@ -106,8 +106,9 @@ public class OrderService {
   @Transactional
   public Order cancelOrder(UUID orderId) {
     JOrder jOrder =
-            orderRepository.findById(orderId)
-                    .orElseThrow(() -> new OrderNotFoundException("Order not found"));
+        orderRepository
+            .findById(orderId)
+            .orElseThrow(() -> new OrderNotFoundException("Order not found"));
 
     if (jOrder.getStatus() == OrderStatus.CANCELLED || jOrder.getStatus() == OrderStatus.SHIPPED) {
       throw new RuntimeException("Cannot cancel an order that's already cancelled or shipped");
@@ -119,8 +120,11 @@ public class OrderService {
       UUID targetProductId = jOrderLine.getProduct().getId();
 
       JProduct jProduct =
-              productRepository.findWithLockById(targetProductId)
-                      .orElseThrow(() -> new ProductNotFoundException("Product not found with id " + targetProductId));
+          productRepository
+              .findWithLockById(targetProductId)
+              .orElseThrow(
+                  () ->
+                      new ProductNotFoundException("Product not found with id " + targetProductId));
       jProduct.setStockQuantity(jProduct.getStockQuantity() + jOrderLine.getQuantity());
       productRepository.save(jProduct);
     }

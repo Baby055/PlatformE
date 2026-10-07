@@ -1,7 +1,6 @@
 package com.sombiniaina.project.repository;
 
 import com.sombiniaina.project.repository.model.JOrder;
-
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;

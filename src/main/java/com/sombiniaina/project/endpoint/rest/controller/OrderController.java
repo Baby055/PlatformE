@@ -4,13 +4,12 @@ import com.sombiniaina.project.dto.request.CheckoutRequest;
 import com.sombiniaina.project.model.Order;
 import com.sombiniaina.project.service.OrderService;
 import jakarta.validation.Valid;
+import java.util.List;
+import java.util.UUID;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.UUID;
 
 @RestController
 @AllArgsConstructor
@@ -28,7 +27,7 @@ public class OrderController {
   }
 
   @PutMapping("/admin/orders/{id}/cancel")
-  public ResponseEntity<Order> cancelOrder(@PathVariable UUID id){
+  public ResponseEntity<Order> cancelOrder(@PathVariable UUID id) {
     return ResponseEntity.status(HttpStatus.OK).body(orderService.cancelOrder(id));
   }
 }
