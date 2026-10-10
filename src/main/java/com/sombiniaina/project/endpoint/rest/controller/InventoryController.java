@@ -1,10 +1,9 @@
 package com.sombiniaina.project.endpoint.rest.controller;
 
 import com.sombiniaina.project.service.InventoryService;
+import jakarta.validation.constraints.Positive;
 import java.math.BigDecimal;
 import java.util.UUID;
-
-import jakarta.validation.constraints.Positive;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PathVariable;

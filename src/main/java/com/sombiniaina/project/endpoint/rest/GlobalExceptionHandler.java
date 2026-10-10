@@ -35,7 +35,7 @@ public class GlobalExceptionHandler {
   @ExceptionHandler(DataIntegrityViolationException.class)
   public ResponseEntity<String> handleIntegrity(DataIntegrityViolationException e) {
     return ResponseEntity.status(HttpStatus.CONFLICT)
-            .body("This resource is referenced by other data and cannot be deleted");
+        .body("This resource is referenced by other data and cannot be deleted");
   }
 
   @ExceptionHandler(ConstraintViolationException.class)

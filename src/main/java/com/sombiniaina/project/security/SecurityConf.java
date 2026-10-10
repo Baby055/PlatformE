@@ -29,9 +29,9 @@ public class SecurityConf {
             auth ->
                 auth.requestMatchers("/ping", "/health/**")
                     .permitAll()
-                        .requestMatchers(HttpMethod.GET, "/products", "/products/**")
-                        .permitAll()
-                    .requestMatchers( "/admin/**")
+                    .requestMatchers(HttpMethod.GET, "/products", "/products/**")
+                    .permitAll()
+                    .requestMatchers("/admin/**")
                     .hasRole("ADMIN")
                     .anyRequest()
                     .authenticated())
@@ -46,10 +46,10 @@ public class SecurityConf {
 
   @Bean
   public UserDetailsService userDetailsService(
-          PasswordEncoder encoder,
-          @Value("${app.admin.username:admin}") String username,
-          @Value("${app.admin.password}") String password
-  ) {
-    return new InMemoryUserDetailsManager(User.withUsername(username).password(password).roles("ADMIN").build());
+      PasswordEncoder encoder,
+      @Value("${app.admin.username:admin}") String username,
+      @Value("${app.admin.password}") String password) {
+    return new InMemoryUserDetailsManager(
+        User.withUsername(username).password(password).roles("ADMIN").build());
   }
 }
