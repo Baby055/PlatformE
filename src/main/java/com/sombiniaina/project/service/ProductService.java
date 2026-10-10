@@ -23,6 +23,7 @@ public class ProductService {
   private final ProductRepository productRepository;
   private final ProductMapper productMapper;
 
+  @Transactional
   public Product createProduct(ProductCreateRequest request) {
     JProduct jProduct =
         JProduct.builder()
@@ -43,6 +44,7 @@ public class ProductService {
     return productMapper.toModel(jProducts.getContent());
   }
 
+  @Transactional
   public Product updateProduct(UUID id, ProductUpdateRequest request) {
     JProduct jProduct =
         productRepository
@@ -54,6 +56,7 @@ public class ProductService {
     return productMapper.toModel(productRepository.save(jProduct));
   }
 
+  @Transactional
   public void deleteProduct(UUID id) {
     if (productRepository.findById(id).isEmpty()) {
       throw new ProductNotFoundException("Product not found");

@@ -4,7 +4,7 @@ import com.sombiniaina.project.model.OrderStatus;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.List;
@@ -23,7 +23,7 @@ public class JOrder {
 
   @NotNull @Email private String customerEmail;
 
-  @Positive private BigDecimal totalPrice;
+  @PositiveOrZero private BigDecimal totalPrice;
 
   private Instant orderDate;
 

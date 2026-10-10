@@ -1,6 +1,7 @@
 package com.sombiniaina.project.endpoint.rest.controller;
 
 import com.sombiniaina.project.service.InventoryService;
+import jakarta.validation.constraints.Positive;
 import java.math.BigDecimal;
 import java.util.UUID;
 import lombok.AllArgsConstructor;
@@ -18,8 +19,8 @@ public class InventoryController {
   @PutMapping("/admin/products/{id}/restock")
   public ResponseEntity<?> restockProduct(
       @PathVariable UUID id,
-      @RequestParam int addedQuantity,
-      @RequestParam BigDecimal newBasePrice) {
+      @RequestParam @Positive int addedQuantity,
+      @RequestParam @Positive BigDecimal newBasePrice) {
     return ResponseEntity.ok(inventoryService.restockAndRevalue(id, addedQuantity, newBasePrice));
   }
 }

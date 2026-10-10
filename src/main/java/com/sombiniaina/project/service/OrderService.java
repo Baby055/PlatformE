@@ -61,7 +61,7 @@ public class OrderService {
 
       if (jProduct.getStockQuantity() < itemRequest.getQuantity()) {
         throw new InsufficientStockException(
-            "Insufficient stock for item"
+            "Insufficient stock for item "
                 + jProduct.getName()
                 + ".Available : "
                 + jProduct.getStockQuantity()
@@ -111,7 +111,7 @@ public class OrderService {
             .orElseThrow(() -> new OrderNotFoundException("Order not found"));
 
     if (jOrder.getStatus() == OrderStatus.CANCELLED || jOrder.getStatus() == OrderStatus.SHIPPED) {
-      throw new RuntimeException("Cannot cancel an order that's already cancelled or shipped");
+      throw new IllegalStateException("Cannot cancel an order that's already cancelled or shipped");
     }
 
     jOrder.setStatus(OrderStatus.CANCELLED);
