@@ -30,4 +30,14 @@ public class OrderController {
   public ResponseEntity<Order> cancelOrder(@PathVariable UUID id) {
     return ResponseEntity.status(HttpStatus.OK).body(orderService.cancelOrder(id));
   }
+
+  @PutMapping("/admin/orders/{id}/pay")
+  public ResponseEntity<Order> payOrder(@PathVariable UUID id) {
+    return ResponseEntity.status(HttpStatus.OK).body(orderService.payOrder(id));
+  }
+
+  @PutMapping("/admin/orders/{id}/ship")
+  public ResponseEntity<Order> shipOrder(@PathVariable UUID id) {
+    return ResponseEntity.status(HttpStatus.OK).body(orderService.shipOrder(id));
+  }
 }
