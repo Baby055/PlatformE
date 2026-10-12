@@ -146,9 +146,10 @@ public class OrderService {
   @Transactional
   public Order payOrder(UUID orderId) {
     JOrder jOrder =
-            orderRepository.findById(orderId)
-                    .orElseThrow(() -> new OrderNotFoundException("Order not found"));
-    if(jOrder.getStatus() != OrderStatus.PENDING) {
+        orderRepository
+            .findById(orderId)
+            .orElseThrow(() -> new OrderNotFoundException("Order not found"));
+    if (jOrder.getStatus() != OrderStatus.PENDING) {
       throw new RuntimeException("Invalid state transition for payment");
     }
     jOrder.setStatus(OrderStatus.PAID);
@@ -159,9 +160,10 @@ public class OrderService {
   @Transactional
   public Order shipOrder(UUID orderId) {
     JOrder jOrder =
-            orderRepository.findById(orderId)
-                    .orElseThrow(() -> new OrderNotFoundException("Order not found"));
-    if(jOrder.getStatus() != OrderStatus.PAID) {
+        orderRepository
+            .findById(orderId)
+            .orElseThrow(() -> new OrderNotFoundException("Order not found"));
+    if (jOrder.getStatus() != OrderStatus.PAID) {
       throw new RuntimeException("Order must be PAID before it can be shipped");
     }
     jOrder.setStatus(OrderStatus.SHIPPED);
