@@ -142,4 +142,30 @@ public class OrderService {
 
     return orderMapper.toModel(jOrders);
   }
+
+  @Transactional
+  public Order payOrder(UUID orderId) {
+    JOrder jOrder =
+            orderRepository.findById(orderId)
+                    .orElseThrow(() -> new OrderNotFoundException("Order not found"));
+    if(jOrder.getStatus() != OrderStatus.PENDING) {
+      throw new RuntimeException("Invalid state transition for payment");
+    }
+    jOrder.setStatus(OrderStatus.PAID);
+    orderRepository.save(jOrder);
+    return orderMapper.toModel(jOrder);
+  }
+
+  @Transactional
+  public Order shipOrder(UUID orderId) {
+    JOrder jOrder =
+            orderRepository.findById(orderId)
+                    .orElseThrow(() -> new OrderNotFoundException("Order not found"));
+    if(jOrder.getStatus() != OrderStatus.PAID) {
+      throw new RuntimeException("Order must be PAID before it can be shipped");
+    }
+    jOrder.setStatus(OrderStatus.SHIPPED);
+    orderRepository.save(jOrder);
+    return orderMapper.toModel(jOrder);
+  }
 }
