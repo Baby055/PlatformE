@@ -48,8 +48,8 @@ public class SecurityConf {
   public UserDetailsService userDetailsService(
       PasswordEncoder encoder,
       @Value("${app.admin.username:admin}") String username,
-      @Value("${app.admin.password}") String password) {
+      @Value("${app.admin.password:}") String password) {
     return new InMemoryUserDetailsManager(
-        User.withUsername(username).password(password).roles("ADMIN").build());
+        User.withUsername(username).password(encoder.encode(password)).roles("ADMIN").build());
   }
 }
